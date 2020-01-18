@@ -70,6 +70,12 @@ class SpaceShooter(arcade.Window):
         # Spawn new cloud every second -- define self.add_cloud!
         arcade.schedule(self.add_cloud, 1.0)
 
+        # Load in sounds
+        # Sounds sources: Jon Fincher
+        self.collision_sound = arcade.load_sound('sounds/Collision.wav')
+        self.move_up_sound = arcade.load_sound('sounds/Rising_putter.wav')
+        self.move_down_sound = arcade.load_sound('sounds/Falling_putter.wav')
+
     def on_draw(self):
         """Draw all game objects"""
         arcade.start_render()
@@ -89,7 +95,8 @@ class SpaceShooter(arcade.Window):
 
         # Did player hit anything? If so, end the game!
         #   Subtlety: check for collision before drawing anything
-        if self.player.collides_with_list(self.enemies_list):
+        if len(self.player.collides_with_list(self.enemies_list)) > 0:
+            arcade.play_sound(self.collision_sound)
             arcade.close_window()
 
         # Update everything to show movement!
@@ -126,12 +133,14 @@ class SpaceShooter(arcade.Window):
 
         if symbol == arcade.key.I or symbol == arcade.key.UP:
             self.player.change_y = 5
+            arcade.play_sound(self.move_up_sound)
 
         if symbol == arcade.key.J or symbol == arcade.key.LEFT:
             self.player.change_x = -5
 
         if symbol == arcade.key.K or symbol == arcade.key.DOWN:
             self.player.change_y = -5
+            arcade.play_sound(self.move_down_sound)
 
         if symbol == arcade.key.L or symbol == arcade.key.RIGHT:
             self.player.change_x = 5
