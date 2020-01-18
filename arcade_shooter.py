@@ -87,6 +87,11 @@ class SpaceShooter(arcade.Window):
         if self.paused:
             return
 
+        # Did player hit anything? If so, end the game!
+        #   Subtlety: check for collision before drawing anything
+        if self.player.collides_with_list(self.enemies_list):
+            arcade.close_window()
+
         # Update everything to show movement!
         self.all_sprites.update()
 
