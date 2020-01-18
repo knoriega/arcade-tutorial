@@ -10,7 +10,7 @@ SCREEN_TITLE = 'Arcade Space Shooter'
 SCALING = 1.0
 
 
-class FlyingSprite(arcade, Sprite):
+class FlyingSprite(arcade.Sprite):
     """Base class for all flying sprites
     Flying sprites include enemies and clouds
     """
@@ -40,6 +40,9 @@ class SpaceShooter(arcade.Window):
         """Initialize the game"""
         super().__init__(width, height, title)
 
+        # Start game not paused
+        self.paused = False
+
         # Set up the empty sprite lists
         # SpriteList has a lot of convenient methods
         #   .draw() for drawing all sprites in list
@@ -68,11 +71,34 @@ class SpaceShooter(arcade.Window):
         arcade.schedule(self.add_cloud, 1.0)
 
     def on_draw(self):
-        """Called whenever you need to draw on your window"""
+        """Draw all game objects"""
         arcade.start_render()
-
-        # Draw everything we know about?
         self.all_sprites.draw()
+
+    def on_update(self, delta_time: float):
+        """Updates the positions and statuses of all game objects
+        If paused, do nothing
+
+        Args:
+            delta_time {float} -- Time since last update
+        """
+
+        # If paused don't do anything
+        if self.paused:
+            return
+
+        # Update everything
+        self.all_sprites.update()
+
+        # Keep player on screen
+        if self.player.top > self.height:
+            self.player.top = self.height
+        if self.player.right > self.width:
+            self.player.right = self.width
+        if self.player.bottom < 0:
+            self.player.bottom = 0
+        if self.player.left < 0:
+            self.player.left = 0
 
     def add_enemy(self, delta_time: float):
         """Adds a new enemy to the screen
@@ -82,7 +108,7 @@ class SpaceShooter(arcade.Window):
         """
 
         # 1. Create new enemy sprite
-        enemy = arcade.FlyingSprite('images/missile.png', SCALING)
+        enemy = FlyingSprite('images/missile.png', SCALING)
 
         # 2. Set position to a random height and off screen right
         enemy.left = random.randint(self.width, self.width + 80)
