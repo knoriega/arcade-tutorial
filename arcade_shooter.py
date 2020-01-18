@@ -17,7 +17,7 @@ class FlyingSprite(arcade.Sprite):
 
     def update(self):
         """Update the position of the sprite
-        When it moves off-screen to the left, remove it
+        When it moves off-screen to the left, remove it!
         """
 
         # Move the sprite
@@ -87,7 +87,7 @@ class SpaceShooter(arcade.Window):
         if self.paused:
             return
 
-        # Update everything
+        # Update everything to show movement!
         self.all_sprites.update()
 
         # Keep player on screen
@@ -99,6 +99,61 @@ class SpaceShooter(arcade.Window):
             self.player.bottom = 0
         if self.player.left < 0:
             self.player.left = 0
+
+    def on_key_press(self, symbol, modifiers):
+        """Handle user keyboard input
+        Q: Quit the game
+        P: Pause/Unpause
+        I/J/K/L: Move up, left, down, right
+        Arrows: Move up, left, down, right
+
+        Args:
+            symbol {int} -- Which key was pressed
+            modifier {int} -- Which modifiers were pressed
+        """
+
+        if symbol == arcade.key.Q:
+            # Quit immediately
+            arcade.close_window()
+
+        if symbol == arcade.key.P:
+            self.paused = not self.paused
+
+        if symbol == arcade.key.I or symbol == arcade.key.UP:
+            self.player.change_y = 5
+
+        if symbol == arcade.key.J or symbol == arcade.key.LEFT:
+            self.player.change_x = -5
+
+        if symbol == arcade.key.K or symbol == arcade.key.DOWN:
+            self.player.change_y = -5
+
+        if symbol == arcade.key.L or symbol == arcade.key.RIGHT:
+            self.player.change_x = 5
+
+    def on_key_release(self, symbol, modifiers):
+        """Undo movement vectors when movement keys are released
+
+        Args:
+            symbol {int} -- Which key was pressed
+            modifiers {int} -- Which modifiers were pressed
+        """
+
+        if (
+            symbol == arcade.key.I
+            or symbol == arcade.key.K
+            or symbol == arcade.key.UP
+            or symbol == arcade.key.DOWN
+        ):
+            self.player.change_y = 0
+
+        if (
+            symbol == arcade.key.J
+            or symbol == arcade.key.L
+            or symbol == arcade.key.LEFT
+            or symbol == arcade.key.RIGHT
+        ):
+            self.player.change_x = 0
 
     def add_enemy(self, delta_time: float):
         """Adds a new enemy to the screen
