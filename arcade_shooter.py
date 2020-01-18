@@ -75,6 +75,7 @@ class SpaceShooter(arcade.Window):
 
         Args:
             delta_time {float} -- How much time has passed since last call (required by arcade.schedule)
+        """
         pass
 
 if __name__ == '__main__':
