@@ -31,12 +31,6 @@ class SpaceShooter(arcade.Window):
         self.clouds_list = arcade.SpriteList()
         self.all_sprites = arcade.SpriteList()
 
-        # Spawn new enemy every 0.25 seconds -- define self.add_enemy!
-        arcade.schedule(self.add_enemy, 0.25)
-
-        # Spawn new cloud every second -- define self.add_cloud
-        arcade.schedule(self.add_cloud, 1.0)
-
     def setup(self):
         """Get the game ready to play"""
 
@@ -48,6 +42,12 @@ class SpaceShooter(arcade.Window):
         self.player.center_y = self.height / 2
         self.player.left = 10
         self.all_sprites.append(self.player)
+
+        # Spawn new enemy every 0.25 seconds -- define self.add_enemy!
+        arcade.schedule(self.add_enemy, 0.25)
+
+        # Spawn new cloud every second -- define self.add_cloud
+        arcade.schedule(self.add_cloud, 1.0)
 
     def on_draw(self):
         """Called whenever you need to draw on your window"""
@@ -77,6 +77,7 @@ class SpaceShooter(arcade.Window):
             delta_time {float} -- How much time has passed since last call (required by arcade.schedule)
         """
         pass
+
 
 if __name__ == '__main__':
     app = SpaceShooter(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
