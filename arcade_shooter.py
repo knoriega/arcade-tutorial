@@ -7,7 +7,7 @@ import random
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = 'Arcade Space Shooter'
-SCALING = 2.0
+SCALING = 1.0
 
 
 class SpaceShooter(arcade.Window):
@@ -25,11 +25,17 @@ class SpaceShooter(arcade.Window):
         # Set up the empty sprite lists
         # SpriteList has a lot of convenient methods
         #   .draw() for drawing all sprites in list
-        #   .update()
+        #   .update() updating states
         #   can check if any sprite has collided with any sprite in the list
         self.enemies_list = arcade.SpriteList()
         self.clouds_list = arcade.SpriteList()
         self.all_sprites = arcade.SpriteList()
+
+        # Spawn new enemy every 0.25 seconds -- define self.add_enemy!
+        arcade.schedule(self.add_enemy, 0.25)
+
+        # Spawn new cloud every second -- define self.add_cloud
+        arcade.schedule(self.add_cloud, 1.0)
 
     def setup(self):
         """Get the game ready to play"""
@@ -43,6 +49,33 @@ class SpaceShooter(arcade.Window):
         self.player.left = 10
         self.all_sprites.append(self.player)
 
+    def on_draw(self):
+        """Called whenever you need to draw on your window"""
+        arcade.start_render()
+
+        # Draw everything we know about
+        self.all_sprites.draw()
+
+    def add_enemy(self, delta_time: float):
+        """Adds a new enemy to the screen
+
+        Args:
+            delta_time {float} -- How much time has passed since last call (required by arcade.schedule)
+        """
+
+        # 1. Create new enemy sprite
+        enemy = arcade.Sprite('images/missile.png', SCALING)
+
+        # 2. Set position to a random height and off screen right
+        enemy.left = random.randint(self.width, self.width + 80)
+        enemy.top = random.randint(10, self.height - 10)
+
+    def add_cloud(self, delta_time: float):
+        """Adds a new cloud to the screen
+
+        Args:
+            delta_time {float} -- How much time has passed since last call (required by arcade.schedule)
+        pass
 
 if __name__ == '__main__':
     app = SpaceShooter(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
